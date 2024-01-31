@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import { getCustomerData } from "../../middleware/uscreen.js";
 import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
 
 function Churn() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +17,9 @@ function Churn() {
 
         for (const user of users) {
           try {
-            const data = await getCustomerData(user.id);
+            const data = await axios.get(
+              `http://localhost:8000/api/v1/get-customer-data/${user.id}`
+            );
             customerData.push(data);
             const fullUser = { userData: user, accesses: data[0] };
             fullUserData.push(fullUser);

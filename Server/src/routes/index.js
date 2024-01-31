@@ -2,13 +2,24 @@
 // routes/index.js
 import { Router } from 'express';
 import authRouter from './auth/index.js';
-import {updateAllContentsController, uploadDataController} from '../controllers/index.js';
+import {getAllData, getCustomerData, updateAllContentsController, uploadDataController} from '../controllers/index.js';
 import { ContentReports,DailyData,Content,Customer, CustomersReport, Report } from '../database/index.js';
 
 const router = Router();
 
 router.use('/auth', authRouter);
 router.post('/upload-json', uploadDataController);
+router.get('/get-all-data', async (req, res) => {
+    const data = await getAllData();
+    res.send(data);
+}
+);
+router.get('/get-customer-data/:id', async (req, res) => {
+    const data = await getCustomerData(req.params.id);
+    res.send(data);
+}
+);
+
 router.get('/update-all-contents', updateAllContentsController);
 router.get('/get-all-contents', (req, res) => {
     Content.findAll()

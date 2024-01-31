@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllData } from "../middleware/uscreen.js";
 import axios from "axios";
+
 function NewReport() {
   const [users, setUsers] = useState([]);
   // const [totalUsers, setTotalUsers] = useState(0);
@@ -26,9 +26,9 @@ function NewReport() {
         setUploadStatus('success'); // Set the status to success on successful upload
         setUpdateContents(true); // Set this to trigger the update process
       } catch (error) {
-        setUploadStatus('error'); 
+        setUploadStatus('error');
 
-        }
+      }
     };
     reader.readAsText(file);
   };
@@ -47,21 +47,20 @@ function NewReport() {
       setUpdateContents(false); // Reset the flag after updating
     }
   }, [updateAllContents]);
-  
-  const handleFetchDataClick = () => {
+
+  const handleFetchDataClick = async () => {
     setIsLoading(true);
-    getAllData()
-      .then((userData) => {
-        setUsers(userData);
-        // setTotalUsers(userData.length);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const response = await axios.get('http://localhost:8000/api/v1/get-all-data');
+      setUsers(response.data); // Assuming the data is the direct response
+      // setTotalUsers(response.data.length); // Uncomment if you want to use totalUsers
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   const handleDownloadJSON = () => {
     const jsonData = JSON.stringify(users, null, 2);
     const blob = new Blob([jsonData], { type: "application/json" });
@@ -75,26 +74,23 @@ function NewReport() {
 
   return (
     <div className="dashboard">
-  <form onSubmit={handleSubmit}>
-      <input type="file" onChange={handleFileChange} />
-      <br />
-      <button type="submit">Upload JSON</button>
-      {uploadStatus === 'success' && <p>Upload successful!</p>}
-      {uploadStatus === 'error' && <p>Error in upload. Please try again.</p>}
-    
-    </form>
+      <form onSubmit={handleSubmit}>
+        <input type="file" onChange={handleFileChange} />
+        <br />
+        <button type="submit">Upload JSON</button>
+        {uploadStatus === 'success' && <p>Upload successful!</p>}
+        {uploadStatus === 'error' && <p>Error in upload. Please try again.</p>}
+      </form>
       <button className="fetch-button" onClick={handleFetchDataClick}>
         Fetch Data
       </button>
-      
-
       {isLoading && <p>Loading...</p>}
       {users.length > 0 ? (
         <>
           <button className="download-button" onClick={handleDownloadJSON}>
             Download JSON
           </button>
-          <p> Download JSON Now</p>
+          <p>Download JSON Now</p>
         </>
       ) : (
         <p>Click the button to fetch data</p>

@@ -26,7 +26,7 @@ export const saveUserReportsStats = async (userReportsStats) => {
         id: id++,
         customerId: userId,
         uniqueViews: uniqueViews.size,
-        reportId: 11111,
+        reportId: 3,
         sessionsCount,
         averageTime: sessionsTime / sessionsCount || 0,
         sessionsTime,
@@ -60,7 +60,7 @@ export const saveContentReportsData = async (contentReports) => {
       await ContentReports.upsert({
         id: id++,
         contentId: contentId,
-        reportId: 11111,
+        reportId: 3,
         ...stats,
         usersCount: stats.usersCount.size,
       });
