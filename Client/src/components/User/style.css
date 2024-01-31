@@ -1,0 +1,61 @@
+.User {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+  }
+  
+  .category-table {
+    margin: 60px; /* Add margin */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+  }
+  
+  .category-summary {
+    margin-bottom: 10px;
+  }
+  
+  .scrollable-table {
+    max-height: 300px; /* Set a maximum height for the scrollable container */
+    overflow-y: auto; /* Enable vertical scrolling when the content exceeds the container height */
+    border: 1px solid #ccc; /* Add a border for aesthetics */
+    margin-bottom: 20px; /* Add some spacing between tables */
+  }
+  
+  button {
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+  }
+  
+
+/* Style for the Fetch Data button */
+.fetch-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .fetch-button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Style for the user count paragraph */
+  .user-count {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+    

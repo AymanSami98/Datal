@@ -1,0 +1,141 @@
+.login {
+    align-items:  center; 
+justify-content: center; 
+font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
+font-weight:  300;  
+height:  100vh; 
+width:  100vw;
+margin:  0 0; 
+display:  flex; 
+background:  #f3f2f2; 
+}
+.App{
+   display: flex;
+ 
+    flex-direction: row;
+    width: auto;
+    height: auto;
+    margin: auto auto;
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0px 2px 6px -1px rgba(0, 0, 0, 0.12);
+}
+
+ span{ 
+  font-size:  24px;
+  color:  rgba(0, 0, 0, 1);
+  font-weight:  700; 
+}
+p{
+  line-height:  155%; 
+    margin-bottom:  5px; 
+    font-size:  14px; 
+    color:  #000; 
+    opacity:  .65;
+    font-weight:  400; 
+    margin-bottom:  40px; 
+}
+.left{
+  width: 520px;
+  height: auto;
+  max-width: 100%;
+  position: relative;
+  background-image: url('https://i.ibb.co/KbPNyJn/microphone2.jpg');
+  background-size: cover;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.right{
+  padding: 40px 30px;
+  background: #fefefe;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  width: 520px;
+  border-radius: 4px;
+}
+input{
+  margin-left: auto;
+  font-size: 16px;
+  padding: 20px 10px;
+  height: 56px;
+  border: none;
+  border-radius: 6px;
+  border-bottom: solid 1px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  width: 480px;
+  box-sizing: border-box;
+  transition: all .3s linear;
+  color: #000;
+  font-weight: 400;
+  -webkit-appearance: none;
+  outline:none;
+  margin-bottom: 10px;
+}
+
+.btn{
+  -webkit-appearance: none;
+  width: 480px;
+  min-width: 100px;
+  border-radius: 6px;
+  text-align: center;
+  padding: 15px 40px;
+  margin-top: 5px;
+  background-color: #13b2a9;
+  color: #fff;
+  font-size: 14px;
+  margin-left: auto;
+  box-shadow: 0px 2px 6px -1px rgba(0, 0, 0, 0.13);
+  border: none;
+  transition: all .3s ease;
+  cursor: pointer;
+  font-weight: 600;
+  
+}
+.sign-in-link{
+    font-weight: 700;
+    color: #13b2a9;
+}
+.form{
+    width: 520px;
+}
+
+.category-table {
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+table th {
+  background-color: #f2f2f2;
+}
+/* App.css */
+
+/* Style for the entire app container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Style for the center container */
+.center-container {
+  text-align: center;
+}
+
+
