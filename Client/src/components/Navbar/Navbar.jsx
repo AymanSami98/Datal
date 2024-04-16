@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 
 import {
@@ -32,11 +32,11 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
+ 
+             <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -47,7 +47,12 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
+                <Link 
+      to="/dashboard"
+      style={{ color: "white", textDecoration: "none" }}
+      >
             DATAL
+      </Link>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -109,6 +114,16 @@ function ResponsiveAppBar() {
                   </NavLink>
                 </Button>
               </MenuItem>
+              <MenuItem key="finance" onClick={handleCloseNavMenu}>
+                <Button>
+                  <NavLink
+                    to="/dashboard/finance"
+                    style={{ color: "Black", textDecoration: "none" }}
+                  >
+                    Finance
+                  </NavLink>
+                </Button>
+              </MenuItem>
               <MenuItem key="new-report" onClick={handleCloseNavMenu}>
                 <Button>
                   <NavLink
@@ -137,7 +152,12 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            DATAL
+               <Link 
+      to="/dashboard"
+      style={{ color: "white", textDecoration: "none" }}
+      >
+           DATAL</Link>
+            
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button>
@@ -162,6 +182,14 @@ function ResponsiveAppBar() {
                 style={{ color: "white", textDecoration: "none" }}
               >
                 Content
+              </NavLink>
+            </Button>
+            <Button>
+              <NavLink
+                to="/dashboard/finance"
+                style={{ color: "white", textDecoration: "none" }}
+              >
+                Finance
               </NavLink>
             </Button>
             <Button>

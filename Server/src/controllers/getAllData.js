@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const uscreenApiKey = process.env.USCREEN_API_KEY;
+const uscreenApiKey = '';
 const maxPages = 1;
 
 const fetchUsers = async (page) => {

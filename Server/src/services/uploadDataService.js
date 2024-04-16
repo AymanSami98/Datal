@@ -1,11 +1,10 @@
-
 import { Customer, Content, DailyData, ContentReports, CustomersReport } from '../database/index.js';
 
 export const saveCustomerData = async (userStats) => {
   for (const [userId, { uniqueViews, sessionsCount, sessionsTime }] of Object.entries(userStats)) {
     try {
       await Customer.upsert({
-        id: userId,
+        id: userId.replace(/,/g, ''), // Remove commas from userId
         uniqueViews: uniqueViews.size,
         sessionsCount,
         averageTime: sessionsTime / sessionsCount || 0,
@@ -24,7 +23,7 @@ export const saveUserReportsStats = async (userReportsStats) => {
     try {
       await CustomersReport.upsert({
         id: id++,
-        customerId: userId,
+        customerId: userId.replace(/,/g, ''), // Remove commas from userId
         uniqueViews: uniqueViews.size,
         reportId: 3,
         sessionsCount,
@@ -36,13 +35,13 @@ export const saveUserReportsStats = async (userReportsStats) => {
       console.error(`Error saving customer data for user ${userId}: ${error}`);
     }
   }
-}
+};
 
 export const saveContentData = async (contentStats) => {
   for (const [contentId, stats] of Object.entries(contentStats)) {
     try {
       await Content.upsert({
-        id: contentId,
+        id: contentId.replace(/,/g, ''), // Remove commas from contentId
         ...stats,
         usersCount: stats.usersCount.size,
         // additional fields can be added here
@@ -59,7 +58,7 @@ export const saveContentReportsData = async (contentReports) => {
     try {
       await ContentReports.upsert({
         id: id++,
-        contentId: contentId,
+        contentId: contentId.replace(/,/g, ''), // Remove commas from contentId
         reportId: 3,
         ...stats,
         usersCount: stats.usersCount.size,
@@ -68,10 +67,7 @@ export const saveContentReportsData = async (contentReports) => {
       console.error(`Error saving content data for content ${contentId}: ${error}`);
     }
   }
-}
-
-
-
+};
 
 export const saveDailyData = async (jsonData) => {
   const dailyDurations = {};
@@ -79,7 +75,7 @@ export const saveDailyData = async (jsonData) => {
 
   jsonData.forEach(({ ViewStart, Duration }) => {
     // Directly extract the date part from the ViewStart string
-    const dateKey = ViewStart.substring(0, 10);
+    const dateKey = new Date(ViewStart).toISOString().substring(0, 10); // Format date as YYYY-MM-DD
     const viewHour = new Date(ViewStart).getUTCHours();
 
     // Initialize or update total duration for the date
@@ -87,7 +83,7 @@ export const saveDailyData = async (jsonData) => {
       dailyDurations[dateKey] = { totalDuration: 0, primetime: null };
       hourlyViewCounts[dateKey] = new Array(24).fill(0);
     }
-    dailyDurations[dateKey].totalDuration += Duration;
+    dailyDurations[dateKey].totalDuration += typeof Duration === 'string' ? parseInt(Duration.replace(/,/g, '')) : Duration; // Handle Duration as string or number
 
     // Count views for each hour in UTC
     hourlyViewCounts[dateKey][viewHour]++;

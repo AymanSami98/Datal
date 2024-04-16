@@ -24,6 +24,7 @@ await Report.create({
   sessionsCount: 1,
   sessionsTime: 1,
   usersCount: 1,
+  rollingAverage: 1,
 });
 await ContentReports.create({
   id: 1,
