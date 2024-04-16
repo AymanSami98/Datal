@@ -2,7 +2,7 @@
 import axios from 'axios';
 import Content from '../database/models/contents.js';
 
-const uscreenApiKey = process.env.USCREEN_API_TOKEN;
+const uscreenApiKey =''
 
 const fetchContentData = async (id, retryCount = 0) => {
   try {

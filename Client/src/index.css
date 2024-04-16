@@ -28,16 +28,18 @@ background:  #f3f2f2;
   display: flex;
 
 }
-
-.dashboard{
+.dashboard {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px auto; /* Sets margin on top and bottom, and centers horizontally */
+  width: 1000px;
+  padding: 20px; /* Optional: Add padding inside the border */
+  box-sizing: border-box; /* Ensure padding is included in the width */
 }
+
 .ana{
   display: flex;
   flex-direction: row;
@@ -45,4 +47,20 @@ background:  #f3f2f2;
   justify-content: center;
   text-align: center;
   gap: 20px;
+}
+.new-sub-data {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+.inside-chart-with-heading {
+  margin-bottom: 20px; /* Added margin to create space between rows */
+
+}
+.topContents{
+  width: 100%;
+  height: 100%;
 }

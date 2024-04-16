@@ -39,7 +39,6 @@ function MostPlayedShort() {
         ShortVideoIDs.push(videoID);
       }
     });
-console.log(input);
     const mostCommonShortVideoIDCounts = ShortVideoIDs.reduce((acc, id) => {
       acc[id] = (acc[id] || 0) + 1;
       return acc;
