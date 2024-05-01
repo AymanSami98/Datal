@@ -8,10 +8,17 @@ import router from './routes/index.js';
 import fs from 'fs';
 import https from 'https';
 const app = express();
-const privateKey = fs.readFileSync('private.key');
-const certificate = fs.readFileSync('certificate.crt');
+
 const {CLIENT_BASE_URL} = process.env;
-const credentials = { privateKey, certificate };
+const key = fs.readFileSync('private.key');
+const cert = fs.readFileSync('certificate.crt');
+// read the certificate and private key
+
+const options = {
+  key,
+  cert,
+};
+console.log(CLIENT_BASE_URL);
 app.use([
   express.json({ limit: '50mb' }),
   express.urlencoded({ extended: true, limit: '50mb' }),
@@ -30,6 +37,7 @@ app.get('/', (_request, response) => response.json({ message: 'Server Is Running
 
 app.use('/api/v1', router);
 app.use([serverError]);
-const httpsServer = https.createServer(credentials, app);
+const httpsServer = https.createServer(options, app);
+
 httpsServer.listen(8443);
 export default app;
