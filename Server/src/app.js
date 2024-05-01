@@ -5,11 +5,12 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { serverError } from './middlewares/index.js';
 import router from './routes/index.js';
-import path from 'path';
-const { CLIENT_BASE_URL } = process.env;
-
+import fs from 'fs';
+import https from 'https';
 const app = express();
-
+const privateKey = fs.readFileSync('private.key');
+const certificate = fs.readFileSync('certificate.crt');
+const credentials = { privateKey, certificate };
 app.use([
   express.json({ limit: '50mb' }),
   express.urlencoded({ extended: true, limit: '50mb' }),
@@ -18,20 +19,18 @@ app.use([
 ]);
 
 app.use(cors({
-  origin: CLIENT_BASE_URL,
+  origin: 'http://localhost:5173', // or a function to handle multiple allowed origins
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'] // Ensure methods match your client requests
 }));
 
 app.get('/', (_request, response) => response.json({ message: 'Server Is Running' }));
 
-app.get('/.well-known/pki-validation/DA84D4EF234FA3167627B20096D3ED90.txt', (req, res) => {
-  const filePath = path.resolve(process.cwd(), 'DA84D4EF234FA3167627B20096D3ED90.txt');
-  res.sendFile(filePath);
-});
-
 
 app.use('/api/v1', router);
 app.use([serverError]);
-
+const httpsServer = https.createServer(credentials, app);
+httpsServer.listen(8443, () => {
+  console.log('HTTPS Server running on port 443');
+});
 export default app;
