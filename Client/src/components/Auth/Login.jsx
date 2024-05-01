@@ -5,6 +5,7 @@ import axios from "axios"; // Import Axios
 import "./style.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../middleware";
+import { LOGIN_URL } from "../../utils/endpoints";
 function Login() {
   const navigate = useNavigate(); // Initialize the navigate function
   const [formData, setFormData] = useState({
@@ -23,13 +24,16 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/auth/login",
-        formData
+        LOGIN_URL,
+        formData,
+        {
+          withCredentials: true // This needs to be set to true to send and receive cookies
+        }
       );
-
+  
       if (response.status === 200) {
         // Successful login
         setMessage("Login successful");
@@ -48,6 +52,7 @@ function Login() {
       setMessage(errorMessage);
     }
   };
+  
 
   return (
     <div className="login">

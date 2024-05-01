@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import { usersListColumns } from "../../utils/columns";
+import { GET_MATCHED_USERS_AND_CUSTOMERS_REPORTS } from "../../utils/endpoints";
 
 function UsersTable() {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ function UsersTable() {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/get-matched-users-and-customers-reports"
+          GET_MATCHED_USERS_AND_CUSTOMERS_REPORTS
         );
         const data = response.data;
 

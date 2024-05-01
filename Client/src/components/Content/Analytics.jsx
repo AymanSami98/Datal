@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import largeData from "../../assets/csvjson.json";
+// import largeData from "../../assets/csvjson.json";
 import Card from '@mui/material/Card';
 
 function Analytics() {
     const [averagePlaysPerMonth, setAveragePlaysPerMonth] = useState(0);
     const [averageMinutesWatchedPerMonth, setAverageMinutesWatchedPerMonth] = useState(0);
-
+const largeData = [];
     useEffect(() => {
         // Calculate the sum of SessionID, Duration, and sort by play count
         let totalSessionIDs = 0;

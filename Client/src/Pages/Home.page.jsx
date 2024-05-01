@@ -15,7 +15,7 @@ import {
 
 function Home() {
   return (
-    <div className="dashboard">
+    <div className="main-dashboard">
       <Typography variant="h5" gutterBottom sx={{ mt: 5 }}>
         Recent Report Contents List
       </Typography>

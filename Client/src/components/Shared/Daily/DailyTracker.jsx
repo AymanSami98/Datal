@@ -5,6 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 import axios from "axios";
 import { dailyColumns } from "../../../utils/columns";
+import { GET_ALL_DAILY_DURATIONS } from "../../../utils/endpoints";
 
 export default function DailyTracker() {
     const [chartData, setChartData] = useState(null); // State to hold formatted data for the chart
@@ -13,7 +14,7 @@ export default function DailyTracker() {
       const fetch = async () => {
         try {
           const response = await axios.get(
-            "http://localhost:8000/api/v1/get-all-daily-durations"
+            GET_ALL_DAILY_DURATIONS
           );
           const formattedData = response.data.map((item) => ({
             date: item.date,

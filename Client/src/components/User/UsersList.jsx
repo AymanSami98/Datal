@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import { usersListColumns } from '../../utils/columns';
+import { GET_ALL_CUSTOMERS } from '../../utils/endpoints';
 
 export default function UsersList() {
   const [data, setData] = useState([]);
     useEffect(() => {
       const fetch = async () => {
         try {
-          const response = await axios.get('http://localhost:8000/api/v1/get-all-customers');
+          const response = await axios.get(GET_ALL_CUSTOMERS);
           setData(response.data);
           
         } catch (error) {

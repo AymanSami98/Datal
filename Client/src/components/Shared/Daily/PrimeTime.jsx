@@ -10,6 +10,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { GET_ALL_DAILY_DURATIONS } from "../../../utils/endpoints";
 
 export default function PrimeTime() {
   const [chartData, setChartData] = useState(null);
@@ -19,7 +20,7 @@ export default function PrimeTime() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/get-all-daily-durations"
+          GET_ALL_DAILY_DURATIONS
         );
         const formattedData = response.data.map((item) => ({
           date: item.date,

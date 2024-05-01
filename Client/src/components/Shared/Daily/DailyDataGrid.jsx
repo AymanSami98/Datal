@@ -2,6 +2,7 @@ import  { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { dailyColumns } from '../../../utils/columns';
+import { GET_ALL_DAILY_DURATIONS } from '../../../utils/endpoints';
 
 export default function DailyDataGrid() {
     const [data, setData] = useState([]);
@@ -9,7 +10,7 @@ export default function DailyDataGrid() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/v1/get-all-daily-durations");
+                const response = await axios.get(GET_ALL_DAILY_DURATIONS);
                 setData(response.data);
             } catch (error) {
                 console.error("Error fetching grid data: ", error);

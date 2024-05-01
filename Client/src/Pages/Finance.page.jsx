@@ -16,7 +16,7 @@ import Papa from "papaparse";
 const SubscriberChart = () => {
   const [usersdata, setUsersData] = useState([]);
   const [userCycleData, setUserCycleData] = useState([]);
-  // const [totalSubscribersData, setTotalSubscribersData] = useState([]);
+  // const [totalSubscribersDaa, setTotalSubscribersData] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
 
   const handleRebillingUpload = (e) => {
@@ -95,7 +95,7 @@ const SubscriberChart = () => {
   const calculateActiveUsersOverTime = () => {
     // Filter only active users initially
     const activeUsersInitial = usersdata.filter(
-        (user) => user["Segment"] === "active"
+      (user) => user["Segment"] === "active"
     );
 
     // Initial total active users count, considering only 'active' segment
@@ -106,17 +106,17 @@ const SubscriberChart = () => {
 
     // Populate futureCancellations with counts, considering only 'active' segment
     activeUsersInitial.forEach((user) => {
-        const canceledAtText = user["Canceled at"];
-        if (canceledAtText) {
-            const effectiveDate = canceledAtText.split("effective ")[1];
-            if (effectiveDate) {
-                const cancelMonth = effectiveDate.slice(0, 7);
-                if (!futureCancellations[cancelMonth]) {
-                    futureCancellations[cancelMonth] = 0;
-                }
-                futureCancellations[cancelMonth]++;
-            }
+      const canceledAtText = user["Canceled at"];
+      if (canceledAtText) {
+        const effectiveDate = canceledAtText.split("effective ")[1];
+        if (effectiveDate) {
+          const cancelMonth = effectiveDate.slice(0, 7);
+          if (!futureCancellations[cancelMonth]) {
+            futureCancellations[cancelMonth] = 0;
+          }
+          futureCancellations[cancelMonth]++;
         }
+      }
     });
 
     // Sort the months to ensure chronological order
@@ -126,14 +126,13 @@ const SubscriberChart = () => {
     let activeUsersByMonth = [];
 
     months.forEach((month) => {
-        // Subtract future cancellations from the total active users
-        totalActiveUsers -= futureCancellations[month];
-        activeUsersByMonth.push({ month: month, totalUser: totalActiveUsers });
+      // Subtract future cancellations from the total active users
+      totalActiveUsers -= futureCancellations[month];
+      activeUsersByMonth.push({ month: month, totalUser: totalActiveUsers });
     });
 
     return activeUsersByMonth;
-};
-
+  };
 
   // Usage example
   const activeUsersOverTime = calculateActiveUsersOverTime();
@@ -210,28 +209,30 @@ const SubscriberChart = () => {
         revenue: monthlyRevenue[monthYear] || 0,
       })
     );
-const sortedData = newSubscribersChartData.sort((a, b) => {
-  if (a.month < b.month) return -1;
-  if (a.month > b.month) return 1;
-  return 0;
-});
+    const sortedData = newSubscribersChartData.sort((a, b) => {
+      if (a.month < b.month) return -1;
+      if (a.month > b.month) return 1;
+      return 0;
+    });
 
     setUserCycleData(sortedData);
     setRevenueData(sortedData);
   };
-  
+
   return (
-    <>
-      <div className="dashboard">
+    <div className="dashboard">
+      <div className="first">
         <p>Add the Users CSV</p>
         <div>
           <input type="file" accept=".csv" onChange={handleRebillingUpload} />
         </div>
-        <div className="dashboard">
-          <p>Add the Users Cycle CSV</p>
-          <input type="file" onChange={handleAnalyze} />
-        </div>
-        <div>
+      </div>
+      <div className="second">
+        <p>Add the Users Cycle CSV</p>
+        <input type="file" onChange={handleAnalyze} />
+      </div>
+      <div className="third">
+        <div className="inside">
           {usersdata.length > 0 && (
             <div className="new-sub-data">
               <div className="inside-chart-with-heading">
@@ -252,7 +253,6 @@ const sortedData = newSubscribersChartData.sort((a, b) => {
                   <Bar dataKey="canceling" fill="red" name={"Canceling"} />
                 </BarChart>
               </div>
-
 
               <div className="inside-chart-with-heading">
                 <BarChart
@@ -275,26 +275,25 @@ const sortedData = newSubscribersChartData.sort((a, b) => {
               </div>
             </div>
           )}
-                      <div className="dashboard">
-                     {activeUsersOverTime.length > 0 && (
-                      <div className="inside-chart-with-heading">
-                      <BarChart
-                        width={600}
-                        height={400}
-                        data={activeUsersOverTime}
-                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="totalUser" fill="#08adbf" name={"Total Users"} />
-                      </BarChart>  </div>)}
-                       
-             
-
-</div>
+          {activeUsersOverTime.length > 0 && (
+            <div className="inside-chart-with-heading">
+              <BarChart
+                width={600}
+                height={400}
+                data={activeUsersOverTime}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="totalUser" fill="#08adbf" name={"Total Users"} />
+              </BarChart>{" "}
+            </div>
+          )}
+        </div>
+        <div>
           {userCycleData.length > 0 && (
             <div className="new-sub-data">
               <div className="inside-chart-with-heading">
@@ -351,7 +350,7 @@ const sortedData = newSubscribersChartData.sort((a, b) => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

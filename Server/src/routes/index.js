@@ -2,13 +2,17 @@
 // routes/index.js
 import { Router } from 'express';
 import authRouter from './auth/index.js';
-import {getAllData, getCustomerData, updateAllContentsController, uploadDataController} from '../controllers/index.js';
+import {getAllData, getCustomerData, updateAllContentsController, uploadDataController,uploadCsvController} from '../controllers/index.js';
 import { ContentReports,DailyData,Content,Customer, CustomersReport, Report } from '../database/index.js';
+import { authenticate } from '../middlewares/index.js';
 
 const router = Router();
 
 router.use('/auth', authRouter);
+
 router.post('/upload-json', uploadDataController);
+router.post('/upload-csv', uploadCsvController);
+
 router.get('/get-all-data', async (req, res) => {
     const data = await getAllData();
     res.send(data);

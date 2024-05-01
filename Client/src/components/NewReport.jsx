@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { GET_ALL_DATA, UPDATE_ALL_CONTENTS, UPLOAD_CSV } from "../utils/endpoints";
+import Papa from "papaparse";
 
 function NewReport() {
   const [users, setUsers] = useState([]);
-  // const [totalUsers, setTotalUsers] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
-  const [uploadStatus, setUploadStatus] = useState(null); // To store the status of the upload
+  const [uploadStatus, setUploadStatus] = useState(null);
   const [updateAllContents, setUpdateContents] = useState(false);
 
   const handleFileChange = (e) => {
@@ -20,40 +21,45 @@ function NewReport() {
     const reader = new FileReader();
     reader.onload = async (e) => {
       const text = e.target.result;
-      const data = JSON.parse(text);
-      try {
-        await axios.post('http://localhost:8000/api/v1/upload-json', { data });
-        setUploadStatus('success'); // Set the status to success on successful upload
-        setUpdateContents(true); // Set this to trigger the update process
-      } catch (error) {
-        setUploadStatus('error');
-
-      }
+      Papa.parse(text, {
+        complete: async (results) => {
+          const data = results.data; // Parse CSV data into an array of objects
+          try {
+            await axios.post(UPLOAD_CSV, { data });
+            setUploadStatus('success');
+            setUpdateContents(true);
+          } catch (error) {
+            setUploadStatus('error');
+          }
+        },
+        header: true // Set to true if the first row of your CSV contains column headers
+      });
     };
     reader.readAsText(file);
   };
+
   const updateContents = async () => {
     try {
-      await axios.get('http://localhost:8000/api/v1/update-all-contents');
+      await axios.get(UPDATE_ALL_CONTENTS);
       alert('Contents updated successfully');
     } catch (error) {
       console.error('Error updating contents:', error);
       alert('Failed to update contents');
     }
   };
+
   useEffect(() => {
     if (updateAllContents) {
       updateContents();
-      setUpdateContents(false); // Reset the flag after updating
+      setUpdateContents(false);
     }
   }, [updateAllContents]);
 
   const handleFetchDataClick = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:8000/api/v1/get-all-data');
-      setUsers(response.data); // Assuming the data is the direct response
-      // setTotalUsers(response.data.length); // Uncomment if you want to use totalUsers
+      const response = await axios.get(GET_ALL_DATA);
+      setUsers(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -75,9 +81,9 @@ function NewReport() {
   return (
     <div className="dashboard">
       <form onSubmit={handleSubmit}>
-        <input type="file" onChange={handleFileChange} />
+        <input type="file" onChange={handleFileChange} accept=".csv"/>
         <br />
-        <button type="submit">Upload JSON</button>
+        <button type="submit">Upload CSV</button>
         {uploadStatus === 'success' && <p>Upload successful!</p>}
         {uploadStatus === 'error' && <p>Error in upload. Please try again.</p>}
       </form>

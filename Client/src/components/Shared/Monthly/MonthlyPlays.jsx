@@ -1,6 +1,7 @@
 import  { useState, useEffect } from "react";
 import axios from "axios";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from "recharts";
+import { GET_ALL_DAILY_DURATIONS } from "../../../utils/endpoints";
 
 export default function MonthlyPlays() {
   const [chartData, setChartData] = useState(null);
@@ -10,7 +11,7 @@ export default function MonthlyPlays() {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/v1/get-all-daily-durations");
+        const response = await axios.get(GET_ALL_DAILY_DURATIONS);
         const formattedData = response.data.map((item) => ({
           date: item.date,
           duration: isNaN(item.totalDuration) ? 0 : (item.totalDuration / 60).toFixed(2),

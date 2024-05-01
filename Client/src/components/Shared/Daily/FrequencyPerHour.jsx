@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Box } from "@mui/material";
+import { GET_ALL_DAILY_DURATIONS } from "../../../utils/endpoints";
 
 export default function FrequencyPerHour() {
     const [chartData, setChartData] = useState([]);
@@ -9,7 +10,7 @@ export default function FrequencyPerHour() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/v1/get-all-daily-durations");
+                const response = await axios.get(GET_ALL_DAILY_DURATIONS);
                 const primeTimes = response.data.map(item => item.primeTime); // Assuming primeTime is your hour data
                 const frequencyMap = primeTimes.reduce((acc, primeTime) => {
                     acc[primeTime] = (acc[primeTime] || 0) + 1;

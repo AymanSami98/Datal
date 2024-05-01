@@ -4,11 +4,14 @@ import {
     calculateUserStats,
     calculateContentStats, calculateContentReportsStats, calculateUserReportsStats
 } from './processJsonData.js';
+import { authenticate } from './authentication.js';
 
 export {
     serverError,
     notFound,
     calculateUserStats,
     calculateContentStats,
-    calculateContentReportsStats, calculateUserReportsStats
+    calculateContentReportsStats,
+    calculateUserReportsStats,
+    authenticate
 };

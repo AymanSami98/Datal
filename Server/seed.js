@@ -18,7 +18,7 @@ await Content.create({
   publishDate: today,
 });
 await Report.create({
-  id: 3,
+  id: 1,
   date: today,
   uniqueViews: 1,
   sessionsCount: 1,
@@ -29,7 +29,7 @@ await Report.create({
 await ContentReports.create({
   id: 1,
   contentId: 1,
-  reportId: 3,
+  reportId: 1,
   sessionsTime: 1,
   sessionsCount: 1,
   usersCount: 1,

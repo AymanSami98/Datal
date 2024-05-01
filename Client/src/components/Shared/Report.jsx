@@ -2,6 +2,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
+import { GET_ALL_REPORTS } from '../../utils/endpoints';
 
 export default function Report() {
   const [reports, setReports] = useState([]);
@@ -9,7 +10,7 @@ export default function Report() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/get-all-reports');
+        const response = await axios.get(GET_ALL_REPORTS);
         setReports(response.data);
       } catch (error) {
         console.error('Error fetching data: ', error);

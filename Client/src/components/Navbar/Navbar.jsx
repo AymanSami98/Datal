@@ -34,9 +34,9 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters>
  
              <Typography
-            variant="h6"
+            variant="div"
             noWrap
-            component="a"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -137,9 +137,9 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
           <Typography
-            variant="h5"
+            variant="div"
             noWrap
-            component="a"
+            component="div"
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
@@ -152,11 +152,11 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-               <Link 
+               <NavLink 
       to="/dashboard"
       style={{ color: "white", textDecoration: "none" }}
       >
-           DATAL</Link>
+           DATAL</NavLink>
             
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>

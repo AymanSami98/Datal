@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { GET_ALL_DAILY_DURATIONS } from '../../../utils/endpoints';
 // Replaced the previous BarChart import with the above line
 
 export default function MonthlyMinutes() {
@@ -37,7 +38,7 @@ export default function MonthlyMinutes() {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/get-all-daily-durations');
+        const response = await axios.get(GET_ALL_DAILY_DURATIONS);
         const formattedData = response.data.map((item) => ({
           date: item.date,
           duration: isNaN(item.totalDuration) ? 0 : (item.totalDuration / 60).toFixed(2),

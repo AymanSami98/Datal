@@ -12,6 +12,7 @@ const ContentReports =
         },
         reportId: {
             type: DataTypes.INTEGER,
+            allowNull: false,
         },
         sessionsTime: {
             type: DataTypes.INTEGER,

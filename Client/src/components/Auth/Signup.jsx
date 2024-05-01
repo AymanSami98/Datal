@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios"; // Import Axios
 import "./style.css";
 import { Link } from "react-router-dom";
+import { SIGNUP_URL } from "../../utils/endpoints";
 function Signup() {
   const [formData, setFormData] = useState({
     email: "",
@@ -24,7 +25,7 @@ function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/auth/signup",
+        SIGNUP_URL,
         formData
       );
 

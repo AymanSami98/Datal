@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
+import { getCustomerDataUrl } from "../../utils/endpoints";
 
 function Churn() {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +19,7 @@ function Churn() {
         for (const user of users) {
           try {
             const data = await axios.get(
-              `http://localhost:8000/api/v1/get-customer-data/${user.id}`
+              getCustomerDataUrl(user.id)
             );
             customerData.push(data);
             const fullUser = { userData: user, accesses: data[0] };

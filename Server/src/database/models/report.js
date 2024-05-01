@@ -23,7 +23,7 @@ const Report = sequelize.define('reports', {
         allowNull: false
     },
     rollingAverage: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT, 
         allowNull: false
     },
     usersCount: {

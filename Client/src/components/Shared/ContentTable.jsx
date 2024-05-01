@@ -3,6 +3,7 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 
 import { contentsListColumns } from "../../utils/columns";
+import { GET_MATCHED_CONTENT_AND_CONTENT_REPORTS } from "../../utils/endpoints";
 
 export default function ContentTable() {
   const [contents, setContents] = useState([]);
@@ -11,7 +12,7 @@ export default function ContentTable() {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/get-matched-content-and-content-reports"
+          GET_MATCHED_CONTENT_AND_CONTENT_REPORTS
         );
         const data = response.data;
 

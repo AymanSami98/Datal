@@ -1,6 +1,7 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { GET_ALL_DAILY_DURATIONS } from '../../../utils/endpoints';
 
 export default function DailyLineChart() {
     const [chartData, setChartData] = useState(null);
@@ -8,7 +9,7 @@ export default function DailyLineChart() {
     useEffect(() => {
         const fetchChartData = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/v1/get-all-daily-durations");
+                const response = await axios.get(GET_ALL_DAILY_DURATIONS);
                 const formattedData = response.data.map(item => ({
                     date: item.date,
                     duration: isNaN(item.totalDuration) ? 0 : parseFloat((item.totalDuration / 60).toFixed(2)), // Convert to number

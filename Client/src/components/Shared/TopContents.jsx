@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { BarChart, Bar, XAxis, YAxis, Tooltip,  CartesianGrid } from 'recharts';
 import { Typography } from "@mui/material";
+import { GET_MATCHED_CONTENT_AND_CONTENT_REPORTS } from "../../utils/endpoints";
 
 
 export default function TopContents() {
@@ -11,7 +12,7 @@ export default function TopContents() {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/get-matched-content-and-content-reports"
+          GET_MATCHED_CONTENT_AND_CONTENT_REPORTS
         );
         const data = response.data;
 
