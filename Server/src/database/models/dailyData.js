@@ -14,6 +14,10 @@ const DailyData = sequelize.define('daily_data', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    totalPlays: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
     },
     );
 

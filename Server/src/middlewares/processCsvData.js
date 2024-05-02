@@ -54,6 +54,7 @@ const calculateContentReportsStats = (jsonData) => {
       sessionsCount: 0,
       usersCount: new Set(),
       hourlyViews: new Array(24).fill(0),
+      type: content_title.toLowerCase().includes('pm') ? 'Livestream' : 'On Demand',
       primeTime: null
     };
 
@@ -91,37 +92,18 @@ const calculateUserReportsStats = (jsonData) => {
 
 const calculateReportStats = (jsonData) => {
   const stats = {
-    uniqueViews: 0,
+    uniqueViews: new Set(),
     sessionsCount: 0,
     sessionsTime: 0,
-    rollingAverage: 0,
     usersCount: new Set()
   };
- // [
-  //   {
-  //     session_id: '7fab4c65f493693c812b10516346edc93e3d673f',
-  //     date: 'March 31, 2024',
-  //     duration: '1,365',
-  //     view_start: 'March 31, 2024, 11:51 PM',
-  //     view_end: 'April 1, 2024, 12:16 AM',
-  //     user_id: '14,718,450',
-  //     user_email: 'alialioop_79@yahoo.co.uk',
-  //     content_type: 'video',
-  //     content_id: '2,063,195',
-  //     content_title: 'Vague',
-  //     video_id: '2,063,195',
-  //     video_title: 'Vague',
-  //     author_title: '["Maisie Adam"]',
-  //     author_id: '[60697]',
-  //     country_name: 'United Kingdom',
-  //     browser: 'BrowserChrome',
-  //     os: 'OSAndroid',
-  //     source: 'web',
-  //     last_activity: 'April 1, 2024, 12:05 AM'
-  //   },]
-  // Iterate over the JSON data to aggregate statistics
-  jsonData.forEach(({ user_id,  duration }) => {
-    stats.uniqueViews++;
+
+  jsonData.forEach(({ user_id, duration }) => {
+    // Check if the view is unique before incrementing uniqueViews
+    if (!stats.uniqueViews.has(user_id)) {
+      stats.uniqueViews.add(user_id);
+    }
+
     stats.sessionsCount++;
     // Adjust duration parsing to handle comma-separated values
     const parsedDuration = typeof duration === 'string' ? parseInt(duration.replace(',', '')) : parseInt(duration);
@@ -129,12 +111,12 @@ const calculateReportStats = (jsonData) => {
     stats.usersCount.add(user_id);
   });
 
-  // Calculate rolling average based on previous tootal sessions time and count
-  stats.rollingAverage = stats.sessionsTime / stats.sessionsCount || 0;
+  // Convert the uniqueViews Set to its size to get the count
+  stats.uniqueViews = stats.uniqueViews.size;
 
   return stats;
-
 };
+
 
 
 export {

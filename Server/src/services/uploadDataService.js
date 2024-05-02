@@ -18,7 +18,7 @@ export const saveCustomerData = async (userStats) => {
   }
 };
 
-export const saveUserReportsStats = async (userReportsStats) => {
+export const saveUserReportsStats = async (userReportsStats,reportId) => {
   try {
     const maxId = await CustomersReport.max('id'); // Get the maximum ID currently in the table
     let id = maxId ? maxId + 1 : 1; // Start from the maximum ID + 1 or 1 if no records exist
@@ -28,7 +28,7 @@ export const saveUserReportsStats = async (userReportsStats) => {
           id,
           customerId: userId.replace(/,/g, ''), // Remove commas from userId
           uniqueViews: uniqueViews.size,
-          reportId: 3,
+          reportId,
           sessionsCount,
           averageTime: sessionsCount ? sessionsTime / sessionsCount : 0,
           sessionsTime,
@@ -60,7 +60,7 @@ export const saveContentData = async (contentStats) => {
   }
 };
 
-export const saveContentReportsData = async (contentReports) => {
+export const saveContentReportsData = async (contentReports,reportId) => {
   try {
     const maxId = await ContentReports.max('id'); // Get the maximum ID currently in the table
     let id = maxId ? maxId + 1 : 1;
@@ -73,7 +73,7 @@ export const saveContentReportsData = async (contentReports) => {
         await ContentReports.upsert({
           id,
           contentId: contentId.replace(/,/g, ''), // Remove commas from contentId
-          reportId: 3,
+          reportId,
           ...stats,
           usersCount: stats.usersCount.size,
         });
@@ -92,7 +92,7 @@ export const saveDailyData = async (jsonData) => {
   const dailyDurations = {};
   const hourlyViewCounts = {};
 
-  jsonData.forEach(({ view_start, Duration }) => {
+  jsonData.forEach(({ view_start, duration }) => {
     // Directly extract the date part from the ViewStart string
     const dateKey = new Date(view_start).toISOString().substring(0, 10); // Format date as YYYY-MM-DD
     const viewHour = new Date(view_start).getUTCHours();
@@ -102,7 +102,7 @@ export const saveDailyData = async (jsonData) => {
       dailyDurations[dateKey] = { totalDuration: 0, primetime: null };
       hourlyViewCounts[dateKey] = new Array(24).fill(0);
     }
-    dailyDurations[dateKey].totalDuration += typeof Duration === 'string' ? parseInt(Duration.replace(/,/g, '')) : Duration; // Handle Duration as string or number
+    dailyDurations[dateKey].totalDuration += typeof duration === 'string' ? parseInt(duration.replace(/,/g, '')) : duration; // Handle Duration as string or number
 
     // Count views for each hour in UTC
     hourlyViewCounts[dateKey][viewHour]++;
@@ -121,33 +121,70 @@ export const saveDailyData = async (jsonData) => {
       await DailyData.upsert({
         date,
         totalDuration,
-        primeTime: primetime
+        primeTime: primetime,
+        totalPlays: hourlyViewCounts[date].reduce((a, b) => a + b, 0)
       });
     } catch (error) {
       console.error(`Error saving daily duration for date ${date}: ${error}`);
     }
   }
 };
+const calculateRollingAverage = async (reportData) => {
+  try {
+    // Fetch all reports from the database
+    const allReports = await Report.findAll();
+
+    // Calculate the total sessions time in minutes including the sessions time of the current report
+    let totalSessionsTime = reportData.sessionsTime / 60;
+    allReports.forEach(report => {
+      totalSessionsTime += report.sessionsTime / 60;
+    });
+
+    // Calculate the rolling average
+    const rollingAverage = totalSessionsTime / (allReports.length + 1); // Adding 1 to include the current report
+
+    return rollingAverage;
+  } catch (error) {
+    console.error(`Error calculating rolling average: ${error}`);
+    throw error;
+  }
+};
+
+
 
 export const saveReport = async (reportData) => {
-//reportData.usersCount size
-console.log(reportData.usersCount.size, 'reportData.usersCount.size');
   const usersCount = parseInt(reportData.usersCount.size);
+  const rollingAverage = await calculateRollingAverage(reportData);
 
-  const rollingAverage = (reportData.sessionsTime / reportData.sessionsCount).toFixed(2);
- 
   try {
-    await Report.upsert({
+    const result = await Report.upsert({
       date: new Date().toISOString().substring(0, 10),
       uniqueViews: reportData.uniqueViews,
       sessionsCount: reportData.sessionsCount,
       sessionsTime: reportData.sessionsTime,
-      rollingAverage: parseFloat(rollingAverage), // Convert rollingAverage to a number
+      rollingAverage: rollingAverage.toFixed(2),
       usersCount
     });
+
     console.log('Report data saved successfully');
+
+    let reportId = null;
+
+    if (result) {
+      // Check if the result is an array with upserted data
+      if (Array.isArray(result)) {
+        // If it contains the upserted data, extract the report ID
+        const [upsertedData] = result;
+        reportId = upsertedData.id;
+      } else {
+        // If it doesn't contain the upserted data, assume the report was updated
+        reportId = result.id;
+      }
+    }
+
+    return reportId;
   } catch (error) {
     console.error(`Error saving report data: ${error}`);
+    throw error;
   }
-}
-
+};

@@ -1,6 +1,6 @@
 // dataController.js
 
-import { saveCustomerData, saveContentData, saveDailyData, saveContentReportsData, saveUserReportsStats,saveReport } from '../services/uploadDataService.js';
+import { saveCustomerData, saveContentData, saveDailyData, saveContentReportsData, saveUserReportsStats, saveReport } from '../services/uploadDataService.js';
 import {
   calculateUserStats,
   calculateContentStats,
@@ -13,18 +13,16 @@ const uploadCsvController = async (req, res) => {
   try {
     const csvData = req.body.data;
     const reportStats = calculateReportStats(csvData);
-    await saveReport(reportStats);
-
-    
+    const reportId = await saveReport(reportStats);
     const userStats = calculateUserStats(csvData);
     const contentStats = calculateContentStats(csvData);
     const contentReportsStats = calculateContentReportsStats(csvData);
     const userReportsStats = calculateUserReportsStats(csvData);
     await saveCustomerData(userStats);
     await saveContentData(contentStats);
-    await saveContentReportsData(contentReportsStats);
+    await saveContentReportsData(contentReportsStats, reportId);
     await saveDailyData(csvData);
-    await saveUserReportsStats(userReportsStats);
+    await saveUserReportsStats(userReportsStats, reportId);
     res.status(200).send('Data processed successfully');
   } catch (error) {
     console.error(error);

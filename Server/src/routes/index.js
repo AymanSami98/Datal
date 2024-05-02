@@ -5,6 +5,7 @@ import authRouter from './auth/index.js';
 import {getAllData, getCustomerData, updateAllContentsController, uploadDataController,uploadCsvController} from '../controllers/index.js';
 import { ContentReports,DailyData,Content,Customer, CustomersReport, Report } from '../database/index.js';
 import { authenticate } from '../middlewares/index.js';
+import latestReport from '../utils/latestReport.js';
 
 const router = Router();
 
@@ -31,29 +32,47 @@ router.get('/get-all-contents', (req, res) => {
         .catch((err) => console.error(err));
     });
 
-router.get('/get-matched-content-and-content-reports', (req, res) => {
-    Content.findAll({
-        include: {
-            model: ContentReports,
-            required: true
-        }
-    })
-        .then((data) => res.send(data))
-        .catch((err) => console.error(err));
-    }
-);
 
-router.get('/get-matched-users-and-customers-reports', (req, res) => {
-    Customer.findAll({
+router.get('/get-matched-content-and-content-reports', async (req, res) => {
+    try {
+        const latest = await latestReport(); // Fetch the latest report
+        const latestReportId = latest.id;
+        const data = await Content.findAll({
+            include: {
+                model: ContentReports,
+                required: true,
+                where: {
+                    reportId: latestReportId // Update to correct column name
+                }
+            }
+        });
+
+        res.send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+router.get('/get-matched-users-and-customers-reports',async (req, res) => {
+try{
+    const latest = await latestReport(); // Fetch the latest report
+    const latestReportId = latest.id;
+    const data = await Customer.findAll({
         include: {
             model: CustomersReport,
-            required: true
+            required: true,
+            where: {
+                reportId: latestReportId // Update to correct column name
+            }
         }
-    })
-        .then((data) => res.send(data))
-        .catch((err) => console.error(err));
-    }
-);
+    });
+    res.send(data);
+} catch (err) { 
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+}
+});
+
 router.get('/get-all-customers', (req, res) => {
     Customer.findAll()
         .then((data) => res.send(data))
