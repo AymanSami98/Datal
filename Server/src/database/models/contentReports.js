@@ -29,6 +29,10 @@ const ContentReports =
         primeTime: {
             type: DataTypes.STRING,
         },
+        firstSessionDate: {
+            type: DataTypes.DATE,
+        },
+        
     },
         {
             paranoid: true,

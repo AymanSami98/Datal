@@ -40,7 +40,6 @@ const fetchContentData = async (id, retryCount = 0) => {
 const updateContentTable = async (id) => {
   try {
     const apiData = await fetchContentData(id);
-
     if (!apiData) {
       console.warn(`No data found for ID ${id}, skipping.`);
       return; // Skip this ID and continue
@@ -52,8 +51,8 @@ const updateContentTable = async (id) => {
       publishDate: new Date(apiData.created_at * 1000),
       duration: apiData.duration,
       //if apiData.duration is less than 15 minutes, then it is a short video and the type is short  and if existingContent.title has pm in it, then it is a live video
-      type: apiData.duration < 900 ? 'Short Form' : existingContent.title.includes('pm') ? 'Livesream' : 'On Demand'
-      
+      type: apiData.duration < 900 ? 'Short Form' : existingContent.title.includes('pm') ? 'Livesream' : 'On Demand',
+      filename: apiData.filename,
     };
    // If the title is not null in the database, retain the existing title
    if (existingContent && existingContent.title) {

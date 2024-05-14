@@ -65,6 +65,10 @@ const calculateContentReportsStats = (jsonData) => {
     stats[content_id].sessionsTime += parsedDuration;
     stats[content_id].usersCount.add(user_id);
     stats[content_id].hourlyViews[viewHour]++;
+    //save the first view_start as the firstSessionDate for the content 
+    if (!stats[content_id].firstSessionDate) {
+      stats[content_id].firstSessionDate = view_start;
+    }
   });
 
   // Determine primeTime for each content
